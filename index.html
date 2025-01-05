@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Element with External Template</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container mt-5">
+    <h1>Using Custom Elements with External Template</h1>
+    <my-custom-element title="Custom Title" text="Hello, World!" link="www.hello-world.com"></my-custom-element>
+    <my-custom-element></my-custom-element> <!-- Default Title -->
+  </div>
+  <div class="container mt-5">
+    <cycle-form title="Bench A1" input="100" reps="10x" name="benchA1"></cycle-form>
+    <cycle-form title="Bench A2" input="200" reps="8x" name="benchA2"></cycle-form>
+  </div>
+
+  <script src="custom-element.js"></script>
+</body>
+</html>
