@@ -1,0 +1,110 @@
+{
+    "W1: Day1": {
+        "W1: Bench Press": {
+            "title": "W1: Bench Press",
+            "sets": 4,
+            "reps": [10, 10, 10, 10],
+            "percents": [0.5, 0.65, 0.7, 0.75]
+        },
+        "incline": {
+            "title": "W1: Incline Bench",
+            "sets": 3,
+            "reps": [10, 8, 6],
+            "percents": []
+        },
+        "decline": {
+            "title": "W1: Decline Bench",
+            "sets": 3,
+            "reps": [10, 8, 6],
+            "percents": []
+        },
+        "closeGrip": {
+            "title": "W1: Close Grip Bench",
+            "sets": 3,
+            "reps": [10, 10, 10],
+            "percents": []
+        },
+        "flies": {
+            "title": "W1: Cable Flies",
+            "sets": 3,
+            "reps": [10, 10, 10],
+            "percents": []
+        },
+        "triceps": {
+            "title": "W1: Tricep Push Downs",
+            "sets": 3,
+            "reps": [10, 10, 10],
+            "percents": []
+        },
+        "reverseCurls": {
+            "title": "W1: Reverse Curls",
+            "sets": 3,
+            "reps": [10, 10, 10],
+            "percents": []
+        }
+    },
+    "W1: Day2": {
+        "frontSquat": {
+            "title": "W1: Front Squat",
+            "sets": 4,
+            "reps": [10, 10, 10, 10],
+            "percents": []
+        },
+        "kettleSwings": {
+            "title": "W1: Kettle Bell Swings",
+            "sets": 3,
+            "reps": [10, 10, 10],
+            "percents": []
+        },
+        "shoulderPressDB": {
+            "title": "W1: Shoulder Press DB",
+            "sets": 3,
+            "reps": [10, 10, 10],
+            "percents": []
+        },
+        "latsFront": {
+            "title": "W1: Lats Front",
+            "sets": 3,
+            "reps": [10, 10, 10],
+            "percents": []
+        },
+        "bentShoulder": {
+            "title": "W1: Bent Shoulder Raises",
+            "sets": 3,
+            "reps": [10, 10, 10],
+            "percents": []
+        },
+        "shrugsDB": {
+            "title": "W1: Shrugs DB",
+            "sets": 3,
+            "reps": [10, 10, 10],
+            "percents": []
+        },
+        "curlsDB": {
+            "title": "W1: Curls DB",
+            "sets": 3,
+            "reps": [10, 10, 10],
+            "percents": []
+        }
+    },
+    "Squat A1": {
+        "A1": {
+            "title": "A1",
+            "sets": 4,
+            "reps": [10, 10, 10, 10],
+            "percents": [0.5, 0.65, 0.7, 0.75]
+        },
+        "A2": {
+            "title": "A2",
+            "sets": 5,
+            "reps": [10, 8, 8, 8, 8],
+            "percents": [0.5, 0.65, 0.7, 0.75, 0.78]
+        },
+        "A3": {
+            "title": "A3",
+            "sets": 6,
+            "reps": [10, 8, 6, 6, 6, 6],
+            "percents": [0.5, 0.65, 0.7, 0.75, 0.78, 0.81]
+        }
+    }
+}

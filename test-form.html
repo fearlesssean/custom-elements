@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Tracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+        <div class="container-fluid">
+            <button class="btn btn-light me-2" onclick="showPage('workout')">Workout</button>
+            <p class="h2 text-light">PWA-Gym</p>
+            <button class="btn btn-light" onclick="showPage('settings')">Settings</button>
+        </div>
+    </nav>
+
+    <!-- Workout Page -->
+    <div id="workout-page" class="container mt-4">
+        <div class="mb-3">
+            <label for="workout-selector" class="form-label text-light">Select Workout Category:</label>
+            <select id="workout-selector" class="form-select">
+                <option value="">Choose...</option>
+            </select>
+        </div>
+        <div id="workout-list"></div>
+    </div>
+
+    <!-- Settings Page -->
+    <div id="settings-page" class="container mt-4 d-none">
+        <h3>Settings</h3>
+        <div class="mb-3">
+            <label for="max-weight" class="form-label">Set Max Weight:</label>
+            <input id="max-weight" type="number" class="form-control" value="100" placeholder="Enter max weight">
+            <button class="btn btn-primary mt-2" onclick="saveMaxWeight()">Save Max Weight</button>
+        </div>
+        <hr>
+        <h3>Workout Logs</h3>
+        <div id="workout-logs"></div>
+    </div>
+
+    <script>
+        let data;
+
+        // Fetch the JSON file and populate the selector
+        fetch('workouts.json')
+            .then(response => response.json())
+            .then(json => {
+                data = json;
+                populateWorkoutSelector();
+            })
+            .catch(error => {
+                console.error('Error fetching workouts.json:', error);
+            });
+
+        function showPage(page) {
+            const workoutPage = document.getElementById('workout-page');
+            const settingsPage = document.getElementById('settings-page');
+
+            if (page === 'workout') {
+                workoutPage.classList.remove('d-none');
+                settingsPage.classList.add('d-none');
+            } else {
+                workoutPage.classList.add('d-none');
+                settingsPage.classList.remove('d-none');
+                loadSettings();
+            }
+        }
+
+        function saveMaxWeight() {
+            const maxWeightInput = document.getElementById('max-weight');
+            const maxWeight = parseInt(maxWeightInput.value) || 100;
+            localStorage.setItem('maxWeight', maxWeight);
+            alert(`Max Weight set to ${maxWeight}`);
+        }
+
+        function loadSettings() {
+            const maxWeightInput = document.getElementById('max-weight');
+            const maxWeight = localStorage.getItem('maxWeight') || 100;
+            maxWeightInput.value = maxWeight;
+
+            const workoutLogs = document.getElementById('workout-logs');
+            workoutLogs.innerHTML = '';
+            for (const category in data) {
+                const workouts = data[category];
+                for (const key in workouts) {
+                    const savedData = JSON.parse(localStorage.getItem(workouts[key].title));
+                    if (savedData) {
+                        let i = 0; // Initialize i for this workout
+                        const log = document.createElement('div');
+                        log.className = 'card mb-3 p-3';
+                        log.innerHTML = `
+                        <h5>${workouts[key].title}</h5>
+                        <ol>
+                            ${savedData
+                                .map(weight => {
+                                    const listItem = `<li>${workouts[key].reps[i]}x: ${weight}.lbs</li>`;
+                                    i++; // Increment i for the next rep
+                                    return listItem;
+                                })
+                                .join('')}
+                        </ol>
+                        `;
+                        workoutLogs.appendChild(log);
+                    }
+                }
+            }
+
+        }
+
+        function populateWorkoutSelector() {
+            const selector = document.getElementById('workout-selector');
+            for (const category in data) {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                selector.appendChild(option);
+            }
+            selector.addEventListener('change', (event) => {
+                const category = event.target.value;
+                if (category) {
+                    createForms(data[category]);
+                } else {
+                    document.getElementById('workout-list').innerHTML = '';
+                }
+            });
+        }
+
+        function createForms(categoryData) {
+            const container = document.getElementById('workout-list');
+            container.innerHTML = ''; // Clear previous workouts
+
+            for (const [key, exercise] of Object.entries(categoryData)) {
+                const form = document.createElement('div');
+                form.className = 'card mb-4 p-3';
+
+                const title = document.createElement('h5');
+                title.textContent = exercise.title;
+                title.className = 'text-primary';
+                form.appendChild(title);
+
+                const exerciseForm = document.createElement('form');
+                exerciseForm.dataset.title = exercise.title;
+
+                exercise.reps.forEach((rep, index) => {
+                    const percent = (exercise.percents[index] || '');
+                    const inputGroup = document.createElement('div');
+                    inputGroup.className = 'mb-3';
+
+                    const maxWeight = parseInt(localStorage.getItem('maxWeight') || '100');
+                    const calculatedWeight = (Math.round(maxWeight * percent / 5) * 5 || '');
+
+                    inputGroup.innerHTML = `
+                        <div class="input-group">
+                            <span class="input-group-text">${rep}x</span>
+                            <input 
+                                type="number" 
+                                class="form-control cycle-input" 
+                                placeholder="Weight" 
+                                value="${calculatedWeight}" min="0" required/>
+                            <span class="input-group-text">lbs</span>
+                        </div>
+                    `;
+                    exerciseForm.appendChild(inputGroup);
+                });
+
+                const submitButton = document.createElement('button');
+                submitButton.type = 'submit';
+                submitButton.className = 'btn btn-primary mt-2';
+                submitButton.textContent = 'Save';
+                exerciseForm.appendChild(submitButton);
+
+                exerciseForm.addEventListener('submit', (event) => {
+                    event.preventDefault();
+                    const weights = Array.from(exerciseForm.querySelectorAll('.cycle-input')).map(input => input.value);
+                    localStorage.setItem(exercise.title, JSON.stringify(weights));
+                    alert(`Data for ${exercise.title} saved!`);
+                });
+
+                form.appendChild(exerciseForm);
+                container.appendChild(form);
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
